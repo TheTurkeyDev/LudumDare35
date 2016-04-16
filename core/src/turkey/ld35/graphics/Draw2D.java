@@ -1,5 +1,6 @@
 package turkey.ld35.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -12,7 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class Draw2D
 {
 	private static SpriteBatch batch = new SpriteBatch();
-	private static BitmapFont font = new BitmapFont();
+	private static BitmapFont font = new BitmapFont(Gdx.files.internal("font/gameFont.fnt"), Gdx.files.internal("font/gameFont.png"), false);
 	private static ShapeRenderer shape = new ShapeRenderer();
 	private static OrthographicCamera camera;
 
@@ -34,7 +35,7 @@ public class Draw2D
 		batch.draw(texture, x, y);
 		batch.end();
 	}
-	
+
 	public static void drawTextured(float x, float y, float scaleX, float scaleY, Texture texture)
 	{
 		batch.enableBlending();

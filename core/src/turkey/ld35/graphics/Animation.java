@@ -4,12 +4,14 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class Animation
 {
-	public float x;
-	public float y;
 	private int stage = 0;
 	private int totalStages;
 	private int stageDelay;
 	private int stageDelayTick;
+	private int stageDirection = 1;
+
+	private int idelTexture = 2;
+	private boolean moving = false;
 
 	private boolean loops;
 
@@ -17,12 +19,9 @@ public class Animation
 
 	private boolean running = true;
 
-	public Animation(float x, float y, int stages, int delay, boolean loops, Texture... textures)
+	public Animation(int delay, boolean loops, Texture... textures)
 	{
-		this.x = x;
-		this.y = y;
-
-		this.totalStages = stages;
+		this.totalStages = textures.length - 1;
 		this.stageDelay = delay;
 
 		this.loops = loops;
@@ -32,33 +31,41 @@ public class Animation
 
 	public void update()
 	{
-		this.stageDelayTick++;
-		if(this.stageDelayTick > this.stageDelay)
+		if(this.moving || this.stage != this.idelTexture)
 		{
-			this.stage++;
-			if(this.stage >= this.totalStages)
+			this.stageDelayTick++;
+			if(this.stageDelayTick > this.stageDelay)
 			{
-				if(this.loops)
+				this.stage += stageDirection;
+				if(this.stage >= this.totalStages || this.stage <= 0)
 				{
-					this.stage = 0;
-					this.stageDelayTick = 0;
-				}
-				else
-				{
-					this.stage--;
-					this.running = false;
+					if(this.loops)
+					{
+						this.stageDirection *= -1;
+						this.stageDelayTick = 0;
+					}
+					else
+					{
+						this.stage--;
+						this.running = false;
+					}
 				}
 			}
 		}
 	}
 
-	public void render()
+	public Texture getCurrentTexture()
 	{
-		Draw2D.drawTextured(x, y, this.textures[this.stage]);
+		return this.textures[this.stage];
 	}
 
 	public boolean isRunning()
 	{
 		return this.running;
+	}
+
+	public void setMoving(boolean moving)
+	{
+		this.moving = moving;
 	}
 }
