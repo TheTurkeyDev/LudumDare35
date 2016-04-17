@@ -4,7 +4,10 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 
+import turkey.ld35.screen.GameOverScreen;
 import turkey.ld35.screen.GameScreen;
+import turkey.ld35.screen.HelpScreen;
+import turkey.ld35.screen.MainScreen;
 import turkey.ld35.screen.ScreenManager;
 
 public class GameCore extends ApplicationAdapter
@@ -13,9 +16,12 @@ public class GameCore extends ApplicationAdapter
 	@Override
 	public void create()
 	{
+		ScreenManager.INSTANCE.addScreen(new MainScreen());
+		ScreenManager.INSTANCE.addScreen(new HelpScreen());
 		ScreenManager.INSTANCE.addScreen(new GameScreen());
+		ScreenManager.INSTANCE.addScreen(new GameOverScreen());
 
-		ScreenManager.INSTANCE.setCurrentScreen("Game Screen");
+		ScreenManager.INSTANCE.setCurrentScreen("Main Screen");
 	}
 
 	@Override

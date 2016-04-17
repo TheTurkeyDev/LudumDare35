@@ -11,7 +11,7 @@ import turkey.ld35.graphics.Draw2D;
 
 public class Monster extends Entity
 {
-	private Random random = new Random();
+	private static Random random = new Random();
 	private Shape ears;
 	private Shape body;
 	private Shape eyes;
@@ -23,9 +23,9 @@ public class Monster extends Entity
 	public Monster(Game game, Vector2 pos)
 	{
 		super(game);
-		this.body = this.getRandomShape(null);
-		this.ears = this.getRandomShape(null);
-		this.eyes = this.getRandomShape(this.body);
+		this.body = getRandomShape(null);
+		this.ears = getRandomShape(null);
+		this.eyes = getRandomShape(this.body);
 		this.position = pos;
 	}
 
@@ -108,7 +108,7 @@ public class Monster extends Entity
 
 	}
 
-	public Shape getRandomShape(Shape reject)
+	public static Shape getRandomShape(Shape reject)
 	{
 		Shape shapeToReturn = null;
 		while(shapeToReturn == null || shapeToReturn == reject)

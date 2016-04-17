@@ -20,8 +20,8 @@ public class GuiButton extends GuiComponent
 	{
 		if(!visible)
 			return;
-		Draw2D.drawTextured(x, y, texture);
-		Draw2D.drawString(x, y + (this.height - 5), this.displayText, 3, Color.WHITE);
+		Draw2D.drawTextured(x, y, width, height, texture);
+		Draw2D.drawString3(x + 30, y + (this.height - 18), this.displayText, 1.75f, Color.WHITE);
 	}
 
 	public Texture getTexture()

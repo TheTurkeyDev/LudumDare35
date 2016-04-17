@@ -15,6 +15,7 @@ import turkey.ld35.entities.Monster;
 import turkey.ld35.entities.Player;
 import turkey.ld35.entities.ShapeProjectile;
 import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.screen.ScreenManager;
 
 public class Game
 {
@@ -29,24 +30,28 @@ public class Game
 	private List<Entity> entities = new ArrayList<Entity>();
 	private Player player;
 
-	private int score = 0;
-	private int wave = 1;
+	private static int score = 0;
+	private static int wave = 1;
 	private int bewteenWaveDelay = 180;
 	private int spawnDelay = 300;
 	private int spawnTick = 200;
 	private int spawnsLeft = 10;
 
-	private Texture background = new Texture("textures/background.png");
+	// private Texture background = new Texture("textures/background.png");
 	private Texture bottomBar = new Texture("textures/bottomBar.png");
-	private Texture border = new Texture("textures/border.png");
+	// private Texture border = new Texture("textures/border.png");
 	private Texture healthBar = new Texture("textures/healthBar.png");
 
 	public void initgame()
 	{
 		entities.clear();
-		player = new Player(this, new Vector2(0, 100));
+		player = new Player(this, new Vector2((Gdx.graphics.getWidth() / 2), (Gdx.graphics.getHeight() / 2)));
 		this.addEntity(player);
 		score = 0;
+		wave = 1;
+		spawnDelay = 300;
+		spawnTick = 200;
+		spawnsLeft = 10;
 	}
 
 	public void render()
@@ -66,25 +71,25 @@ public class Game
 		// Wave info
 		if(this.bewteenWaveDelay > 0)
 		{
-			Draw2D.drawString((Gdx.graphics.getWidth() / 2) - 150, (Gdx.graphics.getHeight() / 2) + 200, "WAVE", 4f, Color.RED);
-			Draw2D.drawString((Gdx.graphics.getWidth() / 2) - 25, (Gdx.graphics.getHeight() / 2) + 75, "" + wave, 4f, Color.MAROON);
+			Draw2D.drawString2((Gdx.graphics.getWidth() / 2) - 150, (Gdx.graphics.getHeight() / 2) + 200, "WAVE", 4f, Color.RED);
+			Draw2D.drawString2((Gdx.graphics.getWidth() / 2) - 25, (Gdx.graphics.getHeight() / 2) + 75, "" + wave, 4f, Color.MAROON);
 		}
 
 		// Box
 		Draw2D.drawTextured(0, 0, bottomBar);
 
 		// Selected Shape
-		//Draw2D.drawTextured(88, 0, 87, 85, border);
+		// Draw2D.drawTextured(88, 0, 87, 85, border);
 		Draw2D.drawString(73, 97, "Selected Shape", .5f, Color.WHITE);
 		Draw2D.drawTextured(100, 10, 64, 64, player.getSelectedShape().getTexture());
 
 		// Health
 		int xtemp = Gdx.graphics.getWidth() / 2;
-		String health = "Health (" + player.getHealth() + "/100)";
+		String health = "Health (" + player.getHealth() + " / 100)";
 		Draw2D.drawTextured(xtemp - 32, 40, player.getTexture());
 		Draw2D.drawTextured(xtemp - 100, 5f, healthBar);
 		Draw2D.drawRect(xtemp - 100 + Math.max(player.getHealth() * 2, 0), 5f, 200 - Math.max(player.getHealth() * 2, 0), 30, Color.RED, true);
-		Draw2D.drawString(xtemp - (health.length() * 4), 30, health, .6f, Color.BLACK);
+		Draw2D.drawString(xtemp - (health.length() * 4), 25, health, .6f, Color.BLACK);
 
 		// Score
 		xtemp = Gdx.graphics.getWidth() - 250;
@@ -103,6 +108,8 @@ public class Game
 	{
 		if(paused)
 			return;
+		if(player.getHealth() <= 0)
+			ScreenManager.INSTANCE.setCurrentScreen("Game Over Screen");
 
 		for(int i = entities.size() - 1; i >= 0; i--)
 		{
@@ -159,15 +166,15 @@ public class Game
 	public void nextWave()
 	{
 		this.bewteenWaveDelay = 180;
-		this.wave++;
-		this.spawnsLeft += this.wave * 5;
-		int dec = 1 / (this.wave / 2);
+		wave++;
+		this.spawnsLeft += wave * 5;
+		int dec = 1 / (wave / 2);
 		this.spawnDelay -= dec < .1 ? .1 : dec;
 	}
 
 	public void addScore(boolean kill)
 	{
-		this.score += 10 * (kill ? 2 : 1);
+		score += 10 * (kill ? 2 : 1);
 	}
 
 	public void addEntity(Entity entity)
@@ -221,25 +228,25 @@ public class Game
 		{
 			if(keycode == Keys.W)
 			{
-				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPositon().add(16, 16), new Vector2(0, PROJECTILE_SPEED)));
+				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(0, PROJECTILE_SPEED)));
 				player.attack();
 				return true;
 			}
 			else if(keycode == Keys.A)
 			{
-				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPositon().add(16, 16), new Vector2(-PROJECTILE_SPEED, 0)));
+				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(-PROJECTILE_SPEED, 0)));
 				player.attack();
 				return true;
 			}
 			else if(keycode == Keys.S)
 			{
-				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPositon().add(16, 16), new Vector2(0, -PROJECTILE_SPEED)));
+				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(0, -PROJECTILE_SPEED)));
 				player.attack();
 				return true;
 			}
 			else if(keycode == Keys.D)
 			{
-				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPositon().add(16, 16), new Vector2(PROJECTILE_SPEED, 0)));
+				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(PROJECTILE_SPEED, 0)));
 				player.attack();
 				return true;
 			}
@@ -284,5 +291,15 @@ public class Game
 		{
 			return this.texture;
 		}
+	}
+
+	public static int getScore()
+	{
+		return score;
+	}
+
+	public static int getWave()
+	{
+		return wave;
 	}
 }

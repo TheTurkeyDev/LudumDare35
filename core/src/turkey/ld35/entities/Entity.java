@@ -42,9 +42,14 @@ public class Entity
 
 	}
 
-	public Vector2 getPositon()
+	public Vector2 getPosition()
 	{
 		return this.position.cpy();
+	}
+	
+	public void addPosition(Vector2 offset)
+	{
+		this.position.add(offset);
 	}
 
 	public int getHealth()
