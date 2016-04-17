@@ -15,6 +15,7 @@ import turkey.ld35.entities.Monster;
 import turkey.ld35.entities.Player;
 import turkey.ld35.entities.ShapeProjectile;
 import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.screen.GameScreen;
 import turkey.ld35.screen.ScreenManager;
 
 public class Game
@@ -24,6 +25,7 @@ public class Game
 	public static final int PROJECTILE_SPEED = 4;
 
 	private boolean paused = false;
+	private GameScreen gameScreen;
 
 	private Random random = new Random();
 
@@ -42,6 +44,11 @@ public class Game
 	// private Texture border = new Texture("textures/border.png");
 	private Texture healthBar = new Texture("textures/healthBar.png");
 
+	public Game(GameScreen gameScreen)
+	{
+		this.gameScreen = gameScreen;
+	}
+
 	public void initgame()
 	{
 		entities.clear();
@@ -52,14 +59,15 @@ public class Game
 		spawnDelay = 300;
 		spawnTick = 200;
 		spawnsLeft = 10;
+		gameScreen.mainMenu.setVisible(false);
+		gameScreen.restart.setVisible(false);
 	}
 
 	public void render()
 	{
-
 		if(this.paused)
 		{
-			Draw2D.drawString((Gdx.graphics.getWidth() / 2) - 200, (Gdx.graphics.getHeight() / 2) + 200, "PAUSED", 4f, Color.RED);
+			Draw2D.drawString2((Gdx.graphics.getWidth() / 2) - 200, (Gdx.graphics.getHeight() / 2) + 200, "PAUSED", 4f, Color.RED);
 		}
 
 		// Draw2D.drawTextured(0, 100, background);
@@ -167,9 +175,15 @@ public class Game
 	{
 		this.bewteenWaveDelay = 180;
 		wave++;
-		this.spawnsLeft += wave * 5;
-		int dec = 1 / (wave / 2);
-		this.spawnDelay -= dec < .1 ? .1 : dec;
+		this.spawnsLeft += wave;
+		if(this.spawnDelay < 30)
+			this.spawnDelay -= 1;
+		else if(this.spawnDelay < 90)
+			this.spawnDelay -= 10;
+		else
+			this.spawnDelay -= 30;
+		
+		
 	}
 
 	public void addScore(boolean kill)
@@ -197,28 +211,30 @@ public class Game
 		if(keycode == Keys.ESCAPE)
 		{
 			this.paused = !this.paused;
+			gameScreen.mainMenu.setVisible(this.paused);
+			gameScreen.restart.setVisible(this.paused);
 			return true;
 		}
 
 		if(this.paused)
 			return false;
 
-		if(keycode == Keys.UP)
+		if(keycode == Keys.W)
 		{
 			player.setYVel(PLAYER_MOVE_SPEED);
 			return true;
 		}
-		else if(keycode == Keys.LEFT)
+		else if(keycode == Keys.A)
 		{
 			player.setXVel(-PLAYER_MOVE_SPEED);
 			return true;
 		}
-		else if(keycode == Keys.DOWN)
+		else if(keycode == Keys.S)
 		{
 			player.setYVel(-PLAYER_MOVE_SPEED);
 			return true;
 		}
-		else if(keycode == Keys.RIGHT)
+		else if(keycode == Keys.D)
 		{
 			player.setXVel(PLAYER_MOVE_SPEED);
 			return true;
@@ -226,25 +242,25 @@ public class Game
 
 		if(player.canAttack())
 		{
-			if(keycode == Keys.W)
+			if(keycode == Keys.UP)
 			{
 				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(0, PROJECTILE_SPEED)));
 				player.attack();
 				return true;
 			}
-			else if(keycode == Keys.A)
+			else if(keycode == Keys.LEFT)
 			{
 				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(-PROJECTILE_SPEED, 0)));
 				player.attack();
 				return true;
 			}
-			else if(keycode == Keys.S)
+			else if(keycode == Keys.DOWN)
 			{
 				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(0, -PROJECTILE_SPEED)));
 				player.attack();
 				return true;
 			}
-			else if(keycode == Keys.D)
+			else if(keycode == Keys.RIGHT)
 			{
 				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(PROJECTILE_SPEED, 0)));
 				player.attack();
@@ -262,13 +278,13 @@ public class Game
 
 	public boolean keyUp(int keycode)
 	{
-		if((keycode == Keys.UP && player.getYVel() > 0) || (keycode == Keys.DOWN && player.getYVel() < 0))
+		if((keycode == Keys.W && player.getYVel() > 0) || (keycode == Keys.S && player.getYVel() < 0))
 		{
 			player.setYVel(0);
 			return true;
 
 		}
-		else if((keycode == Keys.LEFT && player.getXVel() < 0) || (keycode == Keys.RIGHT && player.getXVel() > 0))
+		else if((keycode == Keys.A && player.getXVel() < 0) || (keycode == Keys.D && player.getXVel() > 0))
 		{
 			player.setXVel(0);
 			return true;
@@ -281,6 +297,7 @@ public class Game
 		Circle(new Texture("textures/circle.png")), Triangle(new Texture("textures/triangle.png")), Square(new Texture("textures/square.png"));
 
 		private Texture texture;
+		private static final Texture circleCBM = new Texture("textures/circleCBM.png");
 
 		Shape(Texture texture)
 		{
@@ -289,6 +306,8 @@ public class Game
 
 		public Texture getTexture()
 		{
+			if(this.equals(Shape.Circle) && GameSettings.colorBlindMode)
+				return circleCBM;
 			return this.texture;
 		}
 	}

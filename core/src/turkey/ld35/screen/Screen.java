@@ -6,13 +6,19 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 
+import turkey.ld35.gui.GuiButton;
 import turkey.ld35.gui.GuiComponent;
+import turkey.ld35.gui.GuiRadioButton;
+import turkey.ld35.gui.GuiTextBox;
+import turkey.ld35.sounds.SoundManager;
 
 public class Screen implements InputProcessor
 {
 	private String name;
 
 	protected List<GuiComponent> components = new ArrayList<GuiComponent>();
+	
+	private GuiComponent lastClicked = null;
 
 	public Screen(String name)
 	{
@@ -31,7 +37,7 @@ public class Screen implements InputProcessor
 
 	public void update()
 	{
-
+		
 	}
 
 	public void render()
@@ -80,12 +86,20 @@ public class Screen implements InputProcessor
 	@Override
 	public boolean keyTyped(char character)
 	{
+		if(this.lastClicked != null && lastClicked instanceof GuiTextBox)
+		{
+			((GuiTextBox) this.lastClicked).keyTyped(character);
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
+		if(lastClicked != null && lastClicked instanceof GuiTextBox)
+			((GuiTextBox)lastClicked).focused(false);
+		lastClicked = null;
 		screenY = Gdx.graphics.getHeight() - screenY;
 		for(GuiComponent guic : components)
 		{
@@ -94,6 +108,13 @@ public class Screen implements InputProcessor
 				if(!guic.isVisible())
 					continue;
 				this.onComponentClicked(guic);
+				if(guic instanceof GuiTextBox)
+					((GuiTextBox)guic).focused(true);
+				else if(guic instanceof GuiButton)
+					SoundManager.playSound(SoundManager.buttonPress, 1);
+				else if(guic instanceof GuiRadioButton)
+					((GuiRadioButton)guic).toggleSelected();
+				lastClicked = guic;
 				return true;
 			}
 		}

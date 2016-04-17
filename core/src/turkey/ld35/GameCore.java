@@ -7,8 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 import turkey.ld35.screen.GameOverScreen;
 import turkey.ld35.screen.GameScreen;
 import turkey.ld35.screen.HelpScreen;
+import turkey.ld35.screen.LeaderBoardScreen;
 import turkey.ld35.screen.MainScreen;
 import turkey.ld35.screen.ScreenManager;
+import turkey.ld35.screen.SettingsScreen;
+import turkey.ld35.sounds.SoundManager;
 
 public class GameCore extends ApplicationAdapter
 {
@@ -18,10 +21,18 @@ public class GameCore extends ApplicationAdapter
 	{
 		ScreenManager.INSTANCE.addScreen(new MainScreen());
 		ScreenManager.INSTANCE.addScreen(new HelpScreen());
+		ScreenManager.INSTANCE.addScreen(new LeaderBoardScreen());
+		ScreenManager.INSTANCE.addScreen(new SettingsScreen());
 		ScreenManager.INSTANCE.addScreen(new GameScreen());
 		ScreenManager.INSTANCE.addScreen(new GameOverScreen());
 
 		ScreenManager.INSTANCE.setCurrentScreen("Main Screen");
+	}
+
+	@Override
+	public void dispose()
+	{
+		SoundManager.disposeSounds();
 	}
 
 	@Override

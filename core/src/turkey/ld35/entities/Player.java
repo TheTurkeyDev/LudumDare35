@@ -8,6 +8,7 @@ import turkey.ld35.game.Game;
 import turkey.ld35.game.Game.Shape;
 import turkey.ld35.graphics.Animation;
 import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.sounds.SoundManager;
 
 public class Player extends Entity
 {
@@ -173,6 +174,7 @@ public class Player extends Entity
 
 	public void damage()
 	{
+		SoundManager.playSound(SoundManager.playerDamage, 1f);
 		this.health -= 5;
 	}
 

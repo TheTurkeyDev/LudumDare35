@@ -23,6 +23,9 @@ public class HelpScreen extends Screen
 	private Monster monster1 = new Monster(null, new Vector2(650, Gdx.graphics.getHeight() - 300));
 	private Monster monster2 = new Monster(null, new Vector2(700, Gdx.graphics.getHeight() - 300));
 	private Monster monster3 = new Monster(null, new Vector2(750, Gdx.graphics.getHeight() - 300));
+	
+	private GuiButton back;
+	private GuiButton next;
 
 	private int page = 1;
 	private int maxPages = 3;
@@ -32,9 +35,10 @@ public class HelpScreen extends Screen
 	public HelpScreen()
 	{
 		super("Help Screen");
-		this.addGuiComponent(new GuiButton(0, 10, 10, 338, 75, "Back Page", button));
-		this.addGuiComponent(new GuiButton(1, Gdx.graphics.getWidth() - 348, 10, 338, 75, "Next Page", button));
+		this.addGuiComponent(back = new GuiButton(0, 10, 10, 338, 75, "Back Page", button));
+		this.addGuiComponent(next = new GuiButton(1, Gdx.graphics.getWidth() - 348, 10, 338, 75, "Next Page", button));
 		this.addGuiComponent(new GuiButton(2, (Gdx.graphics.getWidth() / 2) - 169, 10, 338, 75, "Main Menu", button));
+		back.setVisible(false);
 	}
 
 	public void onComponentClicked(GuiComponent guic)
@@ -52,6 +56,17 @@ public class HelpScreen extends Screen
 		else if(guic.getId() == 2)
 		{
 			ScreenManager.INSTANCE.setCurrentScreen("Main Screen");
+		}
+		
+		back.setVisible(true);
+		next.setVisible(true);
+		if(this.page == 1)
+		{
+			back.setVisible(false);
+		}
+		else if(this.page == this.maxPages)
+		{
+			next.setVisible(false);
 		}
 	}
 
@@ -99,17 +114,17 @@ public class HelpScreen extends Screen
 	public void renderPageTwo()
 	{
 		Draw2D.drawString3(450, Gdx.graphics.getHeight() - 10, "CONTROLS", 3f, Color.ORANGE);
-		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 150, "So the controls for Geo Shifter are similar to Binding of Isaac, but reversed...", 1f, Color.ORANGE);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 150, "So the controls for Geo Shifter are similar to Binding of Isaac.", 1f, Color.ORANGE);
 		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 175, "Here's what I mean:", 1f, Color.ORANGE);
 		Draw2D.drawTextured(150, Gdx.graphics.getHeight() - 400, this.keys);
-		Draw2D.drawString3(170, Gdx.graphics.getHeight() - 285, "Shoot Up", 0.5f, Color.ORANGE);
-		Draw2D.drawString3(75, Gdx.graphics.getHeight() - 350, "Shoot Left", 0.5f, Color.ORANGE);
-		Draw2D.drawString3(160, Gdx.graphics.getHeight() - 385, "Shoot Down", 0.5f, Color.ORANGE);
-		Draw2D.drawString3(255, Gdx.graphics.getHeight() - 350, "Shoot Right", 0.5f, Color.ORANGE);
-		Draw2D.drawString3(425, Gdx.graphics.getHeight() - 285, "Move Up", 0.5f, Color.ORANGE);
-		Draw2D.drawString3(340, Gdx.graphics.getHeight() - 350, "Move Left", 0.5f, Color.ORANGE);
-		Draw2D.drawString3(420, Gdx.graphics.getHeight() - 385, "Move Down", 0.5f, Color.ORANGE);
-		Draw2D.drawString3(515, Gdx.graphics.getHeight() - 350, "Move Right", 0.5f, Color.ORANGE);
+		Draw2D.drawString3(170, Gdx.graphics.getHeight() - 285, "Move Up", 0.5f, Color.ORANGE);
+		Draw2D.drawString3(75, Gdx.graphics.getHeight() - 350, "Move Left", 0.5f, Color.ORANGE);
+		Draw2D.drawString3(160, Gdx.graphics.getHeight() - 385, "Move Down", 0.5f, Color.ORANGE);
+		Draw2D.drawString3(255, Gdx.graphics.getHeight() - 350, "Move Right", 0.5f, Color.ORANGE);
+		Draw2D.drawString3(425, Gdx.graphics.getHeight() - 285, "Shoot Up", 0.5f, Color.ORANGE);
+		Draw2D.drawString3(340, Gdx.graphics.getHeight() - 350, "Shoot Left", 0.5f, Color.ORANGE);
+		Draw2D.drawString3(420, Gdx.graphics.getHeight() - 385, "Shoot Down", 0.5f, Color.ORANGE);
+		Draw2D.drawString3(515, Gdx.graphics.getHeight() - 350, "Shoot Right", 0.5f, Color.ORANGE);
 		Draw2D.drawString3(255, Gdx.graphics.getHeight() - 400, "Change Ammo Shape", 0.5f, Color.ORANGE);
 
 		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 450, "Pretty self explanitory, and the spaace bar, or change ammo shape control", 1f, Color.ORANGE);

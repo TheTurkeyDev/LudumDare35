@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import turkey.ld35.game.Game;
 import turkey.ld35.game.Game.Shape;
 import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.sounds.SoundManager;
 
 public class Monster extends Entity
 {
@@ -97,6 +98,9 @@ public class Monster extends Entity
 			this.bodyLeft = false;
 			damaged = true;
 		}
+		
+		if(damaged)
+			SoundManager.playSound(SoundManager.monsterDamage, 1f);
 
 		if(this.earsLeft == 0 && this.eyesLeft == 0 && !this.bodyLeft)
 		{

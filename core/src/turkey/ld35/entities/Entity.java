@@ -3,6 +3,7 @@ package turkey.ld35.entities;
 import com.badlogic.gdx.math.Vector2;
 
 import turkey.ld35.game.Game;
+import turkey.ld35.sounds.SoundManager;
 
 public class Entity
 {
@@ -29,6 +30,7 @@ public class Entity
 
 	public void attack()
 	{
+		SoundManager.playSound(SoundManager.playerShoot, 1f);
 		this.attackTick = this.attackDelay;
 	}
 	

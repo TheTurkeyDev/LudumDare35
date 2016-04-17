@@ -33,7 +33,9 @@ public class MainScreen extends Screen
 	{
 		super("Main Screen");
 		this.addGuiComponent(new GuiButton(0, 100, 300, 338, 75, "START", button));
-		this.addGuiComponent(new GuiButton(1, Gdx.graphics.getWidth() - 438, 300, 338, 75, "HELP", button));
+		this.addGuiComponent(new GuiButton(1, 100, 150, 338, 75, "TOP SCORES", button));
+		this.addGuiComponent(new GuiButton(2, Gdx.graphics.getWidth() - 438, 300, 338, 75, "HELP", button));
+		this.addGuiComponent(new GuiButton(3, Gdx.graphics.getWidth() - 438, 150, 338, 75, "SETTINGS", button));
 	}
 
 	public void onScreenLoad()
@@ -46,8 +48,12 @@ public class MainScreen extends Screen
 	{
 		if(guic.getId() == 0)
 			ScreenManager.INSTANCE.setCurrentScreen("Game Screen");
-		if(guic.getId() == 1)
+		else if(guic.getId() == 1)
+			ScreenManager.INSTANCE.setCurrentScreen("Leaderboard Screen");
+		else if(guic.getId() == 2)
 			ScreenManager.INSTANCE.setCurrentScreen("Help Screen");
+		else if(guic.getId() == 3)
+			ScreenManager.INSTANCE.setCurrentScreen("Settings Screen");
 	}
 
 	public void update()
