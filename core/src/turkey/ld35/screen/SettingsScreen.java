@@ -36,7 +36,7 @@ public class SettingsScreen extends Screen
 	public void render()
 	{
 		super.render();
-		Draw2D.drawString3(350, Gdx.graphics.getHeight() - 10, "SETTINGS", 3f, Color.ORANGE);
+		Draw2D.drawString3(450, Gdx.graphics.getHeight() - 10, "SETTINGS", 3f, Color.ORANGE);
 		Draw2D.drawString3(100, Gdx.graphics.getHeight() - 200, "Sounds", 1f, Color.ORANGE);
 		Draw2D.drawString3(100, Gdx.graphics.getHeight() - 150, "Colorblind Mode", 1f, Color.ORANGE);
 	}

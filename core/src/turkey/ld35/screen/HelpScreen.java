@@ -18,6 +18,7 @@ public class HelpScreen extends Screen
 	private Texture bottomBar = new Texture("textures/bottomBar.png");
 	private Texture healthBar = new Texture("textures/healthBar.png");
 	private Texture playerTexture = new Texture("textures/player/playerTemp.png");
+	private Texture perk = new Texture("textures/perk.png");
 	private Texture randomShape = Shape.Square.getTexture();
 
 	private Monster monster1 = new Monster(null, new Vector2(650, Gdx.graphics.getHeight() - 300));
@@ -28,7 +29,7 @@ public class HelpScreen extends Screen
 	private GuiButton next;
 
 	private int page = 1;
-	private int maxPages = 3;
+	private int maxPages = 4;
 
 	private long tick = 0;
 
@@ -80,6 +81,8 @@ public class HelpScreen extends Screen
 			this.renderPageTwo();
 		else if(this.page == 3)
 			this.renderPageThree();
+		else if(this.page == 4)
+			this.renderPageFour();
 	}
 
 	public void renderPageOne()
@@ -133,7 +136,7 @@ public class HelpScreen extends Screen
 
 	public void renderPageThree()
 	{
-		Draw2D.drawString3(450, Gdx.graphics.getHeight() - 10, "HUD", 3f, Color.ORANGE);
+		Draw2D.drawString3(550, Gdx.graphics.getHeight() - 10, "HUD", 3f, Color.ORANGE);
 		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 150, "So your game hud is this thing which will be at the bottom of the in-game screen", 1f, Color.ORANGE);
 
 		// Box
@@ -146,11 +149,19 @@ public class HelpScreen extends Screen
 		Draw2D.drawString(73, 497, "Selected Shape", .5f, Color.WHITE);
 		Draw2D.drawTextured(100, 410, 64, 64, randomShape);
 
-		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 380, "This slot of the Hud", 1f, Color.ORANGE);
-		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 405, "will show the current", 1f, Color.ORANGE);
-		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 430, "shape that you have", 1f, Color.ORANGE);
-		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 455, "selected to shoot.", 1f, Color.ORANGE);
-
+		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 380, "This slot of the", 1f, Color.ORANGE);
+		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 405, "Hud will show", 1f, Color.ORANGE);
+		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 430, "the current shape", 1f, Color.ORANGE);
+		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 455, "that you have", 1f, Color.ORANGE);
+		Draw2D.drawString3(10, Gdx.graphics.getHeight() - 480, "selected to shoot.", 1f, Color.ORANGE);
+		
+		//Perks
+		Draw2D.drawString(300, 497, "Active Perks:", .5f, Color.WHITE);
+		Draw2D.drawString3(275, Gdx.graphics.getHeight() - 380, "This displays", 1f, Color.ORANGE);
+		Draw2D.drawString3(275, Gdx.graphics.getHeight() - 405, "the current", 1f, Color.ORANGE);
+		Draw2D.drawString3(275, Gdx.graphics.getHeight() - 430, "perks that", 1f, Color.ORANGE);
+		Draw2D.drawString3(275, Gdx.graphics.getHeight() - 455, "the player has", 1f, Color.ORANGE);
+		
 		// Health
 		int xtemp = Gdx.graphics.getWidth() / 2;
 		String health = "Health (" + 100 + " / 100)";
@@ -183,6 +194,22 @@ public class HelpScreen extends Screen
 		Draw2D.drawString3(1125, Gdx.graphics.getHeight() - 405, "wave that", 1f, Color.ORANGE);
 		Draw2D.drawString3(1125, Gdx.graphics.getHeight() - 430, "the game", 1f, Color.ORANGE);
 		Draw2D.drawString3(1125, Gdx.graphics.getHeight() - 455, "is on", 1f, Color.ORANGE);
+	}
+	
+	private void renderPageFour()
+	{
+		Draw2D.drawString3(525, Gdx.graphics.getHeight() - 10, "PERKS", 3f, Color.ORANGE);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 150, "Perks drop as little stars like this ->", 1f, Color.ORANGE);
+		Draw2D.drawTextured(550, Gdx.graphics.getHeight() - 175, perk);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 175, "By Collecting these perks your player gains a random buff or debuff.", 1f, Color.ORANGE);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 200, "Here is a list of the perks!", 1f, Color.ORANGE);
+		
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 250, "FastShoot: Causes the player to shoot shapes faster.", 1f, Color.ORANGE);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 275, "SpeedUp: Speeds up the player.", 1f, Color.ORANGE);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 300, "SlowDown: Slows down the player.", 1f, Color.ORANGE);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 325, "Freeze: Freezes all monsters currently on the screen.", 1f, Color.ORANGE);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 350, "Teleport: Teleports the player to a random spot on the screen.", 1f, Color.ORANGE);
+		Draw2D.drawString3(50, Gdx.graphics.getHeight() - 375, "Health: Heals the player for 10 health.", 1f, Color.ORANGE);
 	}
 
 }

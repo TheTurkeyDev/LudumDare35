@@ -40,6 +40,7 @@ public class MainScreen extends Screen
 
 	public void onScreenLoad()
 	{
+		this.tick = 0;
 		leftMonster = new Monster(null, new Vector2(425, 595));
 		rightMonster = new Monster(null, new Vector2(Gdx.graphics.getWidth() - 475, 595));
 	}

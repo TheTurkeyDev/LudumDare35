@@ -12,25 +12,29 @@ import com.badlogic.gdx.math.Vector2;
 
 import turkey.ld35.entities.Entity;
 import turkey.ld35.entities.Monster;
+import turkey.ld35.entities.Perk.PerkType;
 import turkey.ld35.entities.Player;
 import turkey.ld35.entities.ShapeProjectile;
 import turkey.ld35.graphics.Draw2D;
 import turkey.ld35.screen.GameScreen;
 import turkey.ld35.screen.ScreenManager;
+import turkey.ld35.util.CustomEntry;
 
 public class Game
 {
-	public static final int PLAYER_MOVE_SPEED = 3;
-	public static final int ENTITY_MOVE_SPEED = 2;
-	public static final int PROJECTILE_SPEED = 4;
+	public static int PLAYER_MOVE_SPEED = 3;
+	public static int ENTITY_MOVE_SPEED = 3;
+	public static int PROJECTILE_SPEED = 4;
 
 	private boolean paused = false;
 	private GameScreen gameScreen;
 
-	private Random random = new Random();
+	public static Random random = new Random();
 
 	private List<Entity> entities = new ArrayList<Entity>();
 	private Player player;
+
+	private List<CustomEntry<PerkType, Integer>> activePerks = new ArrayList<CustomEntry<PerkType, Integer>>();
 
 	private static int score = 0;
 	private static int wave = 1;
@@ -61,6 +65,7 @@ public class Game
 		spawnsLeft = 10;
 		gameScreen.mainMenu.setVisible(false);
 		gameScreen.restart.setVisible(false);
+		gameScreen.resume.setVisible(false);
 	}
 
 	public void render()
@@ -90,6 +95,15 @@ public class Game
 		// Draw2D.drawTextured(88, 0, 87, 85, border);
 		Draw2D.drawString(73, 97, "Selected Shape", .5f, Color.WHITE);
 		Draw2D.drawTextured(100, 10, 64, 64, player.getSelectedShape().getTexture());
+
+		// Perks
+		Draw2D.drawString(250, 97, "Active Perks:", .5f, Color.WHITE);
+		int i = 0;
+		for(CustomEntry<PerkType, Integer> perk : this.activePerks)
+		{
+			Draw2D.drawString(250, 80 - (17 * i), perk.getKey().name() + " (" + ((Integer) perk.getValue() / 60) + ")", .5f, Color.WHITE);
+			i++;
+		}
 
 		// Health
 		int xtemp = Gdx.graphics.getWidth() / 2;
@@ -125,6 +139,17 @@ public class Game
 			ent.update();
 			if(!ent.isAlive())
 				entities.remove(i);
+		}
+
+		for(int i = this.activePerks.size() - 1; i >= 0; i--)
+		{
+			CustomEntry<PerkType, Integer> perk = activePerks.get(i);
+			perk.setValue(perk.getValue() - 1);
+			if(perk.getValue() <= 0)
+			{
+				activePerks.remove(i);
+				perk.getKey().endPerk(this);
+			}
 		}
 
 		if(this.bewteenWaveDelay > 0)
@@ -175,15 +200,14 @@ public class Game
 	{
 		this.bewteenWaveDelay = 180;
 		wave++;
-		this.spawnsLeft += wave;
+		this.spawnsLeft += (wave * 2);
 		if(this.spawnDelay < 30)
 			this.spawnDelay -= 1;
 		else if(this.spawnDelay < 90)
 			this.spawnDelay -= 10;
 		else
 			this.spawnDelay -= 30;
-		
-		
+
 	}
 
 	public void addScore(boolean kill)
@@ -206,13 +230,25 @@ public class Game
 		return this.player;
 	}
 
+	public void addPerkEffectToGame(PerkType p)
+	{
+		p.triggerPerk(this);
+		activePerks.add(new CustomEntry<PerkType, Integer>(p, 600));
+	}
+	
+	public void pauseGame()
+	{
+		this.paused = !this.paused;
+		gameScreen.mainMenu.setVisible(this.paused);
+		gameScreen.restart.setVisible(this.paused);
+		gameScreen.resume.setVisible(this.paused);
+	}
+
 	public boolean keyDown(int keycode)
 	{
 		if(keycode == Keys.ESCAPE)
 		{
-			this.paused = !this.paused;
-			gameScreen.mainMenu.setVisible(this.paused);
-			gameScreen.restart.setVisible(this.paused);
+			this.pauseGame();
 			return true;
 		}
 
@@ -244,24 +280,28 @@ public class Game
 		{
 			if(keycode == Keys.UP)
 			{
+				player.lastShootDir = 1;
 				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(0, PROJECTILE_SPEED)));
 				player.attack();
 				return true;
 			}
 			else if(keycode == Keys.LEFT)
 			{
+				player.lastShootDir = 2;
 				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(-PROJECTILE_SPEED, 0)));
 				player.attack();
 				return true;
 			}
 			else if(keycode == Keys.DOWN)
 			{
+				player.lastShootDir = 3;
 				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(0, -PROJECTILE_SPEED)));
 				player.attack();
 				return true;
 			}
 			else if(keycode == Keys.RIGHT)
 			{
+				player.lastShootDir = 4;
 				this.addEntity(new ShapeProjectile(this, player.getSelectedShape(), player.getPosition().add(16, 16), new Vector2(PROJECTILE_SPEED, 0)));
 				player.attack();
 				return true;

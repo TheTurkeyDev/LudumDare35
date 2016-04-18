@@ -16,6 +16,8 @@ public class Entity
 
 	protected int attackDelay = 60;
 	protected int attackTick = 0;
+	
+	public boolean canMove = true;
 
 	public Entity(Game game)
 	{
@@ -49,6 +51,11 @@ public class Entity
 		return this.position.cpy();
 	}
 	
+	public void setPosition(Vector2 pos)
+	{
+		this.position = pos.cpy();
+	}
+	
 	public void addPosition(Vector2 offset)
 	{
 		this.position.add(offset);
@@ -67,5 +74,10 @@ public class Entity
 	public void kill()
 	{
 		this.isAlive = false;
+	}
+	
+	public void setMoving(boolean moving)
+	{
+		this.canMove = moving;
 	}
 }

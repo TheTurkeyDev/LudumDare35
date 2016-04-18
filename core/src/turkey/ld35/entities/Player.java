@@ -23,6 +23,8 @@ public class Player extends Entity
 	private Animation frontAnimation;
 	private Animation backAnimation;
 
+	public int lastShootDir = 1;
+
 	public Player(Game game, Vector2 pos)
 	{
 		super(game);
@@ -64,7 +66,6 @@ public class Player extends Entity
 			this.position.x = 0;
 			this.xVel = 0;
 		}
-		
 
 		if(this.position.y + yVel > Gdx.graphics.getHeight() - 64)
 		{
@@ -76,7 +77,7 @@ public class Player extends Entity
 			this.position.y = 100;
 			this.yVel = 0;
 		}
-		
+
 		if(xVel != 0 && yVel != 0)
 		{
 			this.position.y += yVel / 1.5;
@@ -87,38 +88,25 @@ public class Player extends Entity
 			this.position.y += yVel;
 			this.position.x += xVel;
 		}
-		
+
 	}
 
 	public void render()
 	{
 		currentAnimation.update();
 		currentAnimation.setMoving(false);
-		if(this.xVel < 0)
-		{
-			if(currentAnimation != leftAnimation)
-				currentAnimation = leftAnimation;
-			currentAnimation.setMoving(true);
-		}
-		else if(this.xVel > 0)
-		{
-			if(currentAnimation != rightAnimation)
-				currentAnimation = rightAnimation;
-			currentAnimation.setMoving(true);
-		}
 		
-		if(this.yVel < 0)
-		{
-			if(currentAnimation != frontAnimation)
-				currentAnimation = frontAnimation;
+		if(this.xVel != 0 || this.yVel != 0)
 			currentAnimation.setMoving(true);
-		}
-		else if(this.yVel > 0)
-		{
-			if(currentAnimation != backAnimation)
+
+		if(this.lastShootDir == 1 && currentAnimation != backAnimation)
 				currentAnimation = backAnimation;
-			currentAnimation.setMoving(true);
-		}
+		else if(this.lastShootDir == 2 && currentAnimation != leftAnimation)
+				currentAnimation = leftAnimation;
+		else if(this.lastShootDir == 3 && currentAnimation != frontAnimation)
+				currentAnimation = frontAnimation;
+		else if(this.lastShootDir == 4 && currentAnimation != rightAnimation)
+				currentAnimation = rightAnimation;
 		
 		Draw2D.drawTextured(super.position.x, super.position.y, this.currentAnimation.getCurrentTexture());
 	}
@@ -176,6 +164,11 @@ public class Player extends Entity
 	{
 		SoundManager.playSound(SoundManager.playerDamage, 1f);
 		this.health -= 5;
+	}
+	
+	public void heal()
+	{
+		this.health += 10;
 	}
 
 }

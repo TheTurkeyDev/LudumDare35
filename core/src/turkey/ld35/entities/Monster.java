@@ -32,6 +32,9 @@ public class Monster extends Entity
 
 	public void update()
 	{
+		if(!super.canMove)
+			return;
+
 		super.update();
 		Player player = game.getPlayer();
 		int xToMove = 0;
@@ -82,7 +85,7 @@ public class Monster extends Entity
 
 	public boolean damageByShape(Shape shape)
 	{
-		boolean damaged= false;
+		boolean damaged = false;
 		if(this.ears.equals(shape) && this.earsLeft > 0)
 		{
 			this.earsLeft--;
@@ -98,12 +101,14 @@ public class Monster extends Entity
 			this.bodyLeft = false;
 			damaged = true;
 		}
-		
+
 		if(damaged)
 			SoundManager.playSound(SoundManager.monsterDamage, 1f);
 
 		if(this.earsLeft == 0 && this.eyesLeft == 0 && !this.bodyLeft)
 		{
+			if(random.nextInt(10) == 4)
+				this.game.addEntity(new Perk(super.game, this.position.cpy(), Perk.getRandomPerk()));
 			this.kill();
 			return true;
 		}

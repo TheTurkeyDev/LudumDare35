@@ -65,6 +65,8 @@ public class DataBaseConnect
 			{
 				s = s.trim();
 				int loc = s.indexOf(",");
+				if(loc == -1)
+					continue;
 				leaderBoard.add(new CustomEntry<String, String>(s.substring(0, loc), s.substring(loc + 1)));
 			}
 
