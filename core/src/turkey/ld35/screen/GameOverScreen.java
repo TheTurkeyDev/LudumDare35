@@ -19,13 +19,14 @@ public class GameOverScreen extends Screen
 	private boolean isValidUsername = false;
 	private boolean wasScoreSent = false;
 
+	private GuiButton submit;
 	private GuiTextBox userName;
 
 	public GameOverScreen()
 	{
 		super("Game Over Screen");
 		this.addGuiComponent(new GuiButton(0, 10, 10, 338, 75, "Play Again", button));
-		this.addGuiComponent(new GuiButton(1, (Gdx.graphics.getWidth() / 2) - 169, 10, 338, 75, "Submit Score", button));
+		this.addGuiComponent(submit = new GuiButton(1, (Gdx.graphics.getWidth() / 2) - 169, 10, 338, 75, "Submit Score", button));
 		this.addGuiComponent(new GuiButton(2, Gdx.graphics.getWidth() - 348, 10, 338, 75, "Main Menu", button));
 		this.addGuiComponent(userName = new GuiTextBox(3, (Gdx.graphics.getWidth() / 2) - 225, 150, 450, 75, textBox));
 	}
@@ -34,6 +35,7 @@ public class GameOverScreen extends Screen
 	{
 		isValidUsername = false;
 		wasScoreSent = false;
+		submit.setVisible(true);
 	}
 
 	public void onComponentClicked(GuiComponent guic)

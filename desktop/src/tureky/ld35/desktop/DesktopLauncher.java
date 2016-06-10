@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		config.title = "LudumDare 35";
 		config.width = 1280;
 		config.height = 768;
+		config.resizable = false;
 		new LwjglApplication(new GameCore(), config);
 	}
 }
