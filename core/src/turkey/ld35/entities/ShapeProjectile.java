@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import turkey.ld35.game.Game;
 import turkey.ld35.game.Game.Shape;
-import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.graphics.Renderer;
 
 public class ShapeProjectile extends Entity
 {
@@ -49,7 +49,7 @@ public class ShapeProjectile extends Entity
 
 	public void render()
 	{
-		Draw2D.drawTextured(super.position.x, super.position.y, this.projectileShape.getTexture());
+		Renderer.drawTextured(super.position.x, super.position.y, this.projectileShape.getTexture());
 	}
 
 }

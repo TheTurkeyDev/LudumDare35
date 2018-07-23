@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import turkey.ld35.game.Game;
 import turkey.ld35.game.Game.Shape;
 import turkey.ld35.graphics.Animation;
-import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.graphics.Renderer;
 import turkey.ld35.sounds.SoundManager;
 
 public class Player extends Entity
@@ -108,7 +108,7 @@ public class Player extends Entity
 		else if(this.lastShootDir == 4 && currentAnimation != rightAnimation)
 				currentAnimation = rightAnimation;
 		
-		Draw2D.drawTextured(super.position.x, super.position.y, this.currentAnimation.getCurrentTexture());
+		Renderer.drawTextured(super.position.x, super.position.y, this.currentAnimation.getCurrentTexture());
 	}
 
 	public void setXVel(int vel)

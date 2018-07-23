@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import turkey.ld35.game.Game;
 import turkey.ld35.game.Game.Shape;
-import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.graphics.Renderer;
 import turkey.ld35.sounds.SoundManager;
 
 public class Monster extends Entity
@@ -71,16 +71,18 @@ public class Monster extends Entity
 
 	public void render()
 	{
+		if(this.position.x == 475)
+			System.out.println(this.ears.getTexture());
 		if(this.bodyLeft)
-			Draw2D.drawTextured(this.position.x - 16, this.position.y - 16, 32, 32, this.body.getTexture());
+			Renderer.drawTextured(this.position.x - 16, this.position.y - 16, 32, 32, this.body.getTexture());
 		if(this.eyesLeft > 0)
-			Draw2D.drawTextured(this.position.x - 12, this.position.y - 8, 8, 8, this.eyes.getTexture());
+			Renderer.drawTextured(this.position.x - 12, this.position.y - 8, 8, 8, this.eyes.getTexture());
 		if(this.eyesLeft > 1)
-			Draw2D.drawTextured(this.position.x + 4, this.position.y - 8, 8, 8, this.eyes.getTexture());
+			Renderer.drawTextured(this.position.x + 4, this.position.y - 8, 8, 8, this.eyes.getTexture());
 		if(this.earsLeft > 0)
-			Draw2D.drawTextured(this.position.x - 16, this.position.y + 8, 10, 10, this.ears.getTexture());
+			Renderer.drawTextured(this.position.x - 16, this.position.y + 8, 10, 10, this.ears.getTexture());
 		if(this.earsLeft > 1)
-			Draw2D.drawTextured(this.position.x + 6, this.position.y + 8, 10, 10, this.ears.getTexture());
+			Renderer.drawTextured(this.position.x + 6, this.position.y + 8, 10, 10, this.ears.getTexture());
 	}
 
 	public boolean damageByShape(Shape shape)

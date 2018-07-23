@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import turkey.ld35.game.Game;
-import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.graphics.Renderer;
 
 public class Perk extends Entity
 {
@@ -21,10 +21,10 @@ public class Perk extends Entity
 		super.position = position;
 		this.perk = perk;
 	}
-	
+
 	public void render()
 	{
-		Draw2D.drawTextured(this.position.x, this.position.y, texture);
+		Renderer.drawTextured(this.position.x, this.position.y, texture);
 	}
 
 	public void update()

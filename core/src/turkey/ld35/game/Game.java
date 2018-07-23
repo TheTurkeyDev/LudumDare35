@@ -10,12 +10,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
+import turkey.ld35.GameCore;
 import turkey.ld35.entities.Entity;
 import turkey.ld35.entities.Monster;
 import turkey.ld35.entities.Perk.PerkType;
 import turkey.ld35.entities.Player;
 import turkey.ld35.entities.ShapeProjectile;
-import turkey.ld35.graphics.Draw2D;
+import turkey.ld35.graphics.Renderer;
 import turkey.ld35.screen.GameScreen;
 import turkey.ld35.screen.ScreenManager;
 import turkey.ld35.util.CustomEntry;
@@ -44,13 +45,16 @@ public class Game
 	private int spawnsLeft = 10;
 
 	// private Texture background = new Texture("textures/background.png");
-	private Texture bottomBar = new Texture("textures/bottomBar.png");
+	private Texture bottomBar;
 	// private Texture border = new Texture("textures/border.png");
-	private Texture healthBar = new Texture("textures/healthBar.png");
+	private Texture healthBar;
 
 	public Game(GameScreen gameScreen)
 	{
 		this.gameScreen = gameScreen;
+		
+		bottomBar = new Texture("textures/bottomBar.png");
+		healthBar = new Texture("textures/healthBar.png");
 	}
 
 	public void initgame()
@@ -72,10 +76,10 @@ public class Game
 	{
 		if(this.paused)
 		{
-			Draw2D.drawString2((Gdx.graphics.getWidth() / 2) - 200, (Gdx.graphics.getHeight() / 2) + 200, "PAUSED", 4f, Color.RED);
+			Renderer.drawString(Renderer.gf, (Gdx.graphics.getWidth() / 2) - 200, (Gdx.graphics.getHeight() / 2) + 200, "PAUSED", 4f, Color.RED);
 		}
 
-		// Draw2D.drawTextured(0, 100, background);
+		// Renderer.drawTextured(0, 100, background);
 		for(Entity entity : entities)
 		{
 			entity.render();
@@ -84,46 +88,46 @@ public class Game
 		// Wave info
 		if(this.bewteenWaveDelay > 0)
 		{
-			Draw2D.drawString2((Gdx.graphics.getWidth() / 2) - 150, (Gdx.graphics.getHeight() / 2) + 200, "WAVE", 4f, Color.RED);
-			Draw2D.drawString2((Gdx.graphics.getWidth() / 2) - 25, (Gdx.graphics.getHeight() / 2) + 75, "" + wave, 4f, Color.MAROON);
+			Renderer.drawString(Renderer.gf, (Gdx.graphics.getWidth() / 2) - 150, (Gdx.graphics.getHeight() / 2) + 200, "WAVE", 4f, Color.RED);
+			Renderer.drawString(Renderer.gf, (Gdx.graphics.getWidth() / 2) - 25, (Gdx.graphics.getHeight() / 2) + 75, "" + wave, 4f, Color.MAROON);
 		}
 
 		// Box
-		Draw2D.drawTextured(0, 0, bottomBar);
+		Renderer.drawTextured(0, 0, bottomBar);
 
 		// Selected Shape
-		// Draw2D.drawTextured(88, 0, 87, 85, border);
-		Draw2D.drawString(73, 97, "Selected Shape", .5f, Color.WHITE);
-		Draw2D.drawTextured(100, 10, 64, 64, player.getSelectedShape().getTexture());
+		// Renderer.drawTextured(88, 0, 87, 85, border);
+		Renderer.drawString(Renderer.ss, 73, 97, "Selected Shape", 0.5f, Color.WHITE);
+		Renderer.drawTextured(100, 10, 64, 64, player.getSelectedShape().getTexture());
 
 		// Perks
-		Draw2D.drawString(250, 97, "Active Perks:", .5f, Color.WHITE);
+		Renderer.drawString(Renderer.ss, 250, 97, "Active Perks:", 0.5f, Color.WHITE);
 		int i = 0;
 		for(CustomEntry<PerkType, Integer> perk : this.activePerks)
 		{
-			Draw2D.drawString(250, 80 - (17 * i), perk.getKey().name() + " (" + ((Integer) perk.getValue() / 60) + ")", .5f, Color.WHITE);
+			Renderer.drawString(Renderer.ss, 250, 80 - (17 * i), perk.getKey().name() + " (" + ((Integer) perk.getValue() / 60) + ")", 0.5f, Color.WHITE);
 			i++;
 		}
 
 		// Health
 		int xtemp = Gdx.graphics.getWidth() / 2;
 		String health = "Health (" + player.getHealth() + " / 100)";
-		Draw2D.drawTextured(xtemp - 32, 40, player.getTexture());
-		Draw2D.drawTextured(xtemp - 100, 5f, healthBar);
-		Draw2D.drawRect(xtemp - 100 + Math.max(player.getHealth() * 2, 0), 5f, 200 - Math.max(player.getHealth() * 2, 0), 30, Color.RED, true);
-		Draw2D.drawString(xtemp - (health.length() * 4), 25, health, .6f, Color.BLACK);
+		Renderer.drawTextured(xtemp - 32, 40, player.getTexture());
+		Renderer.drawTextured(xtemp - 100, 5, healthBar);
+		Renderer.drawRect(xtemp - 100 + Math.max(player.getHealth() * 2, 0), 5, 200 - Math.max(player.getHealth() * 2, 0), healthBar.getHeight(), Color.RED, true);
+		Renderer.drawString(Renderer.ss, xtemp - (health.length() * 4), 25, health, 0.5f, Color.BLACK);
 
 		// Score
 		xtemp = Gdx.graphics.getWidth() - 250;
 		String scoreTemp = "" + score;
-		Draw2D.drawString(xtemp, 90, "Score", 1, Color.WHITE);
-		Draw2D.drawString(xtemp + 40 - (scoreTemp.length() * 5), 55, scoreTemp, 1.5f, Color.WHITE);
+		Renderer.drawString(Renderer.ss, xtemp, 90, "Score", 1, Color.WHITE);
+		Renderer.drawString(Renderer.ss, xtemp + 40 - (scoreTemp.length() * 5), 55, scoreTemp, 1.5f, Color.WHITE);
 
 		// Wave
 		xtemp = Gdx.graphics.getWidth() - 100;
 		String waveTemp = "" + wave;
-		Draw2D.drawString(xtemp, 90, "Wave", 1f, Color.WHITE);
-		Draw2D.drawString(xtemp + 35 - (waveTemp.length() * 5), 55, waveTemp, 1.5f, Color.WHITE);
+		Renderer.drawString(Renderer.ss, xtemp, 90, "Wave", 1f, Color.WHITE);
+		Renderer.drawString(Renderer.ss, xtemp + 35 - (waveTemp.length() * 5), 55, waveTemp, 1.5f, Color.WHITE);
 	}
 
 	public void update()
@@ -131,7 +135,7 @@ public class Game
 		if(paused)
 			return;
 		if(player.getHealth() <= 0)
-			ScreenManager.INSTANCE.setCurrentScreen("Game Over Screen");
+			GameCore.THE_GAME.setScreen(ScreenManager.getScreen("game_over_screen", false));
 
 		for(int i = entities.size() - 1; i >= 0; i--)
 		{
@@ -235,7 +239,7 @@ public class Game
 		p.triggerPerk(this);
 		activePerks.add(new CustomEntry<PerkType, Integer>(p, 600));
 	}
-	
+
 	public void pauseGame()
 	{
 		this.paused = !this.paused;
@@ -330,6 +334,12 @@ public class Game
 			return true;
 		}
 		return false;
+	}
+
+	public void dispose()
+	{
+		bottomBar.dispose();
+		healthBar.dispose();
 	}
 
 	public enum Shape

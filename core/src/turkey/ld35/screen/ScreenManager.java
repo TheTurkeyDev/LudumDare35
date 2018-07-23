@@ -1,54 +1,46 @@
 package turkey.ld35.screen;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 
 public class ScreenManager
 {
-	public static final ScreenManager INSTANCE = new ScreenManager();
+	private static Map<String, Class<? extends Screen>> screens = new HashMap<>();
+	private static Map<String, Screen> screenCache = new HashMap<>();
 
-	private List<Screen> screens = new ArrayList<Screen>();
-	private Screen currentScreen;
-
-	public void addScreen(Screen screen)
+	public static void addScreen(String name, Class<? extends Screen> screen)
 	{
-		screens.add(screen);
+		screens.put(name, screen);
 	}
 
-	public void setCurrentScreen(Screen screen)
+	public static Screen getScreen(String name, boolean cache)
 	{
-		if(this.currentScreen != null)
-			this.currentScreen.onScreenUnload();
-		this.currentScreen = screen;
-		this.currentScreen.onScreenLoad();
-		Gdx.input.setInputProcessor(currentScreen);
-	}
+		if(cache && screenCache.containsKey(name))
+			return screenCache.get(name);
 
-	public void setCurrentScreen(String name)
-	{
-		for(Screen screen : this.screens)
+		if(screens.containsKey(name))
 		{
-			if(screen.getScreenName().equalsIgnoreCase(name))
+			try
 			{
-				if(this.currentScreen != null)
-					this.currentScreen.onScreenUnload();
-				this.currentScreen = screen;
-				this.currentScreen.onScreenLoad();
+				Screen s = screens.get(name).newInstance();
+				if(screenCache.containsKey(name))
+					screenCache.get(name).dispose();
+				screenCache.put(name, s);
+				return s;
+			} catch(InstantiationException | IllegalAccessException e)
+			{
+				e.printStackTrace();
+				return null;
 			}
 		}
-		Gdx.input.setInputProcessor(currentScreen);
+		return null;
 	}
 
-	public void updateScreen()
+	public static void dispose()
 	{
-		currentScreen.update();
+		for(String s : screenCache.keySet())
+			screenCache.get(s).dispose();
 	}
-
-	public void renderScreen()
-	{
-		currentScreen.render();
-	}
-
 }

@@ -39,7 +39,7 @@ public class Particle
 
 	public void render()
 	{
-		Draw2D.drawTextured(this.position.x, this.position.y, width, height, texture);
+		Renderer.drawTextured(this.position.x, this.position.y, width, height, texture);
 	}
 
 	public Vector2 getPositon()

@@ -37,7 +37,7 @@ public class DataBaseConnect
 	{
 		try
 		{
-			HttpURLConnection con = (HttpURLConnection) new URL("http://theprogrammingturkey.com/API/LD35LeaderBoardGet.php").openConnection();
+			HttpURLConnection con = (HttpURLConnection) new URL("http://api.theprogrammingturkey.com/LD35LeaderBoardGet.php").openConnection();
 			con.setReadTimeout(20000);
 			con.setRequestProperty("Connection", "keep-alive");
 			con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:16.0) Gecko/20100101 Firefox/16.0");
